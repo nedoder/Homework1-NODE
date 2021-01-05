@@ -1,6 +1,6 @@
 const express = require("express");
 const upload = require("express-fileupload");
-const libre = require("libreoffice-convert");
+// const libre = require("libreoffice-convert");
 const path = require('path');
 const fs = require('fs');
 const extend = '.pdf';
@@ -32,14 +32,19 @@ app.post("/", (req, res) => {
                     console.log("File uploaded!", name);
                     res.send("Done!");
                     const enterPath = path.join(__dirname, '/uploads/' + name);
-                    const outputPath = path.join(__dirname, '/uploads/' + `name${ extend }`);
+                    const newName = name.substr(0, name.lastIndexOf(".")) + extend;
+                    const outputPath = path.join(__dirname, '/uploads/', newName);
                     const fileConv = fs.readFileSync(enterPath);
-                    libre.convert(fileConv, extend, undefined, (err, done) => {
-                        if (err) {
-                            console.log(`Error converting file: ${err}`);
-                        }
-                        fs.writeFileSync(outputPath, done);
-                    });
+                    fs.writeFileSync(outputPath, fileConv);
+                    console.log(typeof fileConv);
+                    // const fileConv = fs.readFile(enterPath);
+                    // fs.writeFile(outputPath, fileConv);
+                    // libre.convert(fileConv, extend, undefined, (err, done) => {
+                    //     if (err) {
+                    //         console.log(`Error converting file: ${err}`);
+                    //     }
+                    //     fs.writeFileSync(outputPath, done);
+                    // });
                 }
 
             });

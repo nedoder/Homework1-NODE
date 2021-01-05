@@ -30,11 +30,12 @@
             <img src="/img/undraw_progressive.svg" alt="App illustration">
         </div>
         <div class="forms">
-            <form action="/" method="POST" class="fileupload" enctype="multipart/form-data">
+            <form action="/" method="POST" class="fileupload" enctype="multipart/form-data" target="uploader_iframe">
                 <h4>Drag &amp; drop file here</h4>
                 <input type="file" name="upfile" value="">
                 <input type="submit" value="Convert">
             </form>
+            <iframe id="uploader_iframe" name="uploader_iframe" style="display: none;"></iframe>
             <button>Download PDF now</button>
             <h4>We can send you your PDF on e-mail!</h4>
             <input type="email" name="email" value="" placeholder="example@gmail.com">
