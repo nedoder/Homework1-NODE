@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap');
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    height: 100vh;
+    font-size: 16px;
+    font-family: "JetBrains Mono", monospace;
+    background: #373b44;
+    background: -webkit-linear-gradient(to bottom, #373b44, #4286f4);
+    background: linear-gradient(to bottom, #373b44, #4286f4);
+}
+
+.logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 1rem;
+}
+
+.counter {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 1rem;
+    padding: 1rem;
+}
+
+.description {
+    position: absolute;
+    top: 5rem;
+    width: 100%;
+    margin: auto;
+    text-align: center;
+}
+
+.content {
+    position: absolute;
+    top: 10rem;
+    width: 100%;
+    margin: auto;
+    text-align: center;
+}
+
+::-webkit-file-upload-button,
+input[type="submit"],
+.content button {
+    padding: 0.5rem;
+    background-color: #4286f4;
+    border-radius: 0.5rem;
+    border: 1px solid #13505B;
+    outline: none;
+    margin: 1rem;
+}
+
+input[type="file"] {
+    outline: none;
+}
+
+input[type="email"] {
+    outline: none;
+    border: none;
+    padding: 0.5rem;
+    margin: 1rem;
+    border-radius: 1rem;
+    background-color: #f2f2f2;
+}
+
+.forms {
+    position: absolute;
+    top: 30%;
+    right: 0;
+    width: 40%;
+    height: 60vh;
+    padding: 1rem;
+    margin: 1rem;
+    margin-right: 2rem;
+    background-color: rgba(19, 80, 91, 0.5);
+    border-radius: 2rem;
+    box-shadow: 0rem 0rem 0.2rem #4286f4;
+}
+
+.undraw {
+    position: absolute;
+    top: 30%;
+    left: 0;
+    width: 60%;
+    height: 60vh;
+    padding: 1rem;
+    margin: 1rem;
+}
+
+.undraw img {
+    width: 80%;
+    height: auto;
+}
