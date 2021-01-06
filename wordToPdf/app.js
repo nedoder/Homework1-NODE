@@ -17,7 +17,7 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 require('dotenv').config();
 
 
-initIva("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmY0OTE2N2U0M2QwYTAwMjlmZTMxMDAiLCJjcmVhdGVkQXQiOjE2MDk4NjM1Mjc0OTIsImlhdCI6MTYwOTg2MzUyN30.AZGINcsKbohbVBJXN_JTkwJrmx19AQ026jt6-4Vz-nw");
+initIva(process.env.APIKEY);
 const app = express();
 app.use(upload());
 

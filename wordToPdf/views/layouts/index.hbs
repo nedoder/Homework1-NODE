@@ -14,15 +14,7 @@
   {{{body}}}
 
   <script>
-  var links = document.querySelector("a");
-  link = links.getAttribute("href");
-  links.addEventListener("click", changeColor);
-  function changeColor(e) {
-    if(link!=="") {
-      links.style.backgroundColor = "green";
-    }
-  }
-
+  
   var sendForm = document.getElementsByClassName("sendemail")[0];
   var send = document.querySelector("#send");
 
@@ -35,12 +27,11 @@
 
   var uploadForm = document.getElementsByClassName("fileupload")[0];
   var uploadBtn = document.querySelector("#upload");
-
+  var links = document.querySelector("a");
   uploadBtn.addEventListener("click", uploadFile);
 
   function uploadFile() {
     uploadForm.submit();
-
   }
 </script>
 

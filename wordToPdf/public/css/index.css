@@ -125,7 +125,7 @@ input[type="email"] {
     width: 80%;
     text-align: center;
     font-family: "JetBrains Mono", monospace;
-    margin-left: 2rem;
+    margin-left: 5rem;
 }
 
 @media only screen and (max-width: 992px) {
