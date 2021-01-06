@@ -88,8 +88,8 @@ app.post("/send", (req, res) => {
         var mailOptions = {
             from: 'converternodejs@gmail.com',
             to: req.body.email,
-            subject: 'Sending Email using Node.js',
-            text: 'That was easy!',
+            subject: 'Sending your converted PDF file',
+            text: 'We converted your .docx file to PDF. Hope you are satisfied with the result.',
             attachments: {
                 path: downloadPath,
             }
