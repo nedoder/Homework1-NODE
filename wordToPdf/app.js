@@ -59,7 +59,7 @@ app.post("/", (req, res) => {
                         })
                     downloadPath = path.join(__dirname, basename(filePath).replace(".docx", ".pdf"));
                     downloadPath.toString();
-                    console.log(downloadPath)
+
                 }
 
 

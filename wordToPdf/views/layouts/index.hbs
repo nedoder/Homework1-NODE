@@ -27,12 +27,23 @@
 
   var uploadForm = document.getElementsByClassName("fileupload")[0];
   var uploadBtn = document.querySelector("#upload");
-  var links = document.querySelector("a");
+  
   uploadBtn.addEventListener("click", uploadFile);
 
   function uploadFile() {
     uploadForm.submit();
   }
+
+{{!-- var links = document.querySelector("a");
+  var link = links.getAttribute("href");
+  
+
+  link.addEventListener("change", changeLink);
+  function changeLink() {
+    if(link!=="") {
+      links.style.backgroundColor = "green";
+    }
+  } --}}
 </script>
 
 </body>
