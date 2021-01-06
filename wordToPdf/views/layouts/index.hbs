@@ -13,7 +13,7 @@
 
   {{{body}}}
 
-  {{!-- <script>
+  <script>
   var links = document.querySelector("a");
   link = links.getAttribute("href");
   links.addEventListener("click", changeColor);
@@ -22,7 +22,27 @@
       links.style.backgroundColor = "green";
     }
   }
-</script> --}}
+
+  var sendForm = document.getElementsByClassName("sendemail")[0];
+  var send = document.querySelector("#send");
+
+  send.addEventListener("click", sendMail);
+
+  function sendMail() {
+    sendForm.submit();
+
+  }
+
+  var uploadForm = document.getElementsByClassName("fileupload")[0];
+  var uploadBtn = document.querySelector("#upload");
+
+  uploadBtn.addEventListener("click", uploadFile);
+
+  function uploadFile() {
+    uploadForm.submit();
+
+  }
+</script>
 
 </body>
 

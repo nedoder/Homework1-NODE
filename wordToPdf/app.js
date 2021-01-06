@@ -6,10 +6,16 @@ const { basename } = require("path");
 const path = require('path');
 const fs = require('fs');
 const handlebars = require("express-handlebars");
+var nodemailer = require('nodemailer');
 var counter = require('./counter.json');
 counterPath = './counter.json';
 var outputVal = counter.counter;
 var downloadPath = "";
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
+require('dotenv').config();
+
 
 initIva("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmY0OTE2N2U0M2QwYTAwMjlmZTMxMDAiLCJjcmVhdGVkQXQiOjE2MDk4NjM1Mjc0OTIsImlhdCI6MTYwOTg2MzUyN30.AZGINcsKbohbVBJXN_JTkwJrmx19AQ026jt6-4Vz-nw");
 const app = express();
@@ -24,6 +30,10 @@ app.engine('hbs', handlebars({
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
+    res.render('main', { layout: 'index', outputVal, downloadPath });
+});
+
+app.get("/send", (req, res) => {
     res.render('main', { layout: 'index', outputVal, downloadPath });
 });
 
@@ -48,8 +58,8 @@ app.post("/", (req, res) => {
 
                         })
                     downloadPath = path.join(__dirname, basename(filePath).replace(".docx", ".pdf"));
-                    // downloadPath.toString();
-
+                    downloadPath.toString();
+                    console.log(downloadPath)
                 }
 
 
@@ -59,9 +69,43 @@ app.post("/", (req, res) => {
 
         }
 
+
     }
 });
 
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'converternodejs@gmail.com',
+        pass: process.env.PASSWORD
+    }
+});
+
+
+
+app.post("/send", (req, res) => {
+    if (req.body.email) {
+        var mailOptions = {
+            from: 'converternodejs@gmail.com',
+            to: req.body.email,
+            subject: 'Sending Email using Node.js',
+            text: 'That was easy!',
+            attachments: {
+                path: downloadPath,
+            }
+
+        };
+
+
+        transporter.sendMail(mailOptions, function(error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
+    }
+})
 
 
 app.listen(3000, function() {

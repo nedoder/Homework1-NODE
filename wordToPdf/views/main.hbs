@@ -20,14 +20,16 @@
             <form action="/" method="POST" class="fileupload" enctype="multipart/form-data"  target="uploader_iframe">
                 <h4>Drag &amp; drop file here</h4>
                 <input type="file" name="upfile" value="">
-                <input type="submit" value="Convert">
+                <input type="submit" id="upload" value="Convert">
                 
             </form>
             <iframe id="uploader_iframe" name="uploader_iframe"></iframe> <br>
-            <a href = {{ downloadPath }} >Download your PDF now</a>
+            <a href={{downloadPath}}>Download your PDF now</a>
             <h4>We can send you your PDF on e-mail!</h4>
+            <form action="/send" method="POST" class="sendemail" enctype="multipart/form-data">
             <input type="email" name="email" value="" placeholder="example@gmail.com">
-            <button>Send</button>
+            <input type="submit" id="send" value="Send">
+            </form>
         </div>
 
     </div>
