@@ -1,55 +1,60 @@
 const express = require("express");
 const upload = require("express-fileupload");
-// const libre = require("libreoffice-convert");
+const { docxToPdfFromPath, initIva } = require("iva-converter");
+const { writeFileSync } = require("fs");
+const { basename } = require("path");
 const path = require('path');
 const fs = require('fs');
-const extend = '.pdf';
+const handlebars = require("express-handlebars");
+var counter = require('./counter.json');
+counterPath = './counter.json';
+var outputVal = counter.counter;
 
-
+initIva("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmY0OTE2N2U0M2QwYTAwMjlmZTMxMDAiLCJjcmVhdGVkQXQiOjE2MDk4NjM1Mjc0OTIsImlhdCI6MTYwOTg2MzUyN30.AZGINcsKbohbVBJXN_JTkwJrmx19AQ026jt6-4Vz-nw");
 const app = express();
 app.use(upload());
+
+app.set('view engine', 'hbs');
+app.engine('hbs', handlebars({
+    layoutsDir: __dirname + '/views/layouts',
+    extname: 'hbs'
+}));
+
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
-    res.sendFile(__dirname + "/index.html");
+    res.render('main', { layout: 'index', outputVal });
 });
 
 app.post("/", (req, res) => {
     console.log(req.files);
     if (req.files.upfile) {
         const file = req.files.upfile;
-        console.log(req.files.upfile);
         const name = file.name;
         const type = file.mimetype;
         const uploadpath = __dirname + "/uploads/" + name;
         if (type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
             file.mv(uploadpath, (err) => {
                 if (err) {
-                    console.log("File upload failed!", name, err);
                     res.send("Error occured!");
 
                 } else {
-                    console.log("File uploaded!", name);
-                    res.send("Done!");
-                    const enterPath = path.join(__dirname, '/uploads/' + name);
-                    const newName = name.substr(0, name.lastIndexOf(".")) + extend;
-                    const outputPath = path.join(__dirname, '/uploads/', newName);
-                    const fileConv = fs.readFileSync(enterPath);
-                    fs.writeFileSync(outputPath, fileConv);
-                    console.log(typeof fileConv);
-                    // const fileConv = fs.readFile(enterPath);
-                    // fs.writeFile(outputPath, fileConv);
-                    // libre.convert(fileConv, extend, undefined, (err, done) => {
-                    //     if (err) {
-                    //         console.log(`Error converting file: ${err}`);
-                    //     }
-                    //     fs.writeFileSync(outputPath, done);
-                    // });
+                    res.send("File uploaded!");
+                    const filePath = path.join(__dirname, '/uploads/' + name);
+                    docxToPdfFromPath(filePath)
+                        .then((pdfFile) => {
+                            counter.counter++;
+                            fs.writeFileSync(counterPath, JSON.stringify(counter));
+                            writeFileSync(basename(filePath).replace(".docx", ".pdf"), pdfFile);
+                        })
+
+
                 }
 
             });
         } else {
             res.send("File is not word!");
+
         }
 
     }
