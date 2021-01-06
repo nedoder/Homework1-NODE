@@ -9,6 +9,7 @@ const handlebars = require("express-handlebars");
 var counter = require('./counter.json');
 counterPath = './counter.json';
 var outputVal = counter.counter;
+var downloadPath = "";
 
 initIva("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmY0OTE2N2U0M2QwYTAwMjlmZTMxMDAiLCJjcmVhdGVkQXQiOjE2MDk4NjM1Mjc0OTIsImlhdCI6MTYwOTg2MzUyN30.AZGINcsKbohbVBJXN_JTkwJrmx19AQ026jt6-4Vz-nw");
 const app = express();
@@ -23,11 +24,10 @@ app.engine('hbs', handlebars({
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
-    res.render('main', { layout: 'index', outputVal });
+    res.render('main', { layout: 'index', outputVal, downloadPath });
 });
 
 app.post("/", (req, res) => {
-    console.log(req.files);
     if (req.files.upfile) {
         const file = req.files.upfile;
         const name = file.name;
@@ -37,7 +37,6 @@ app.post("/", (req, res) => {
             file.mv(uploadpath, (err) => {
                 if (err) {
                     res.send("Error occured!");
-
                 } else {
                     res.send("File uploaded!");
                     const filePath = path.join(__dirname, '/uploads/' + name);
@@ -46,10 +45,13 @@ app.post("/", (req, res) => {
                             counter.counter++;
                             fs.writeFileSync(counterPath, JSON.stringify(counter));
                             writeFileSync(basename(filePath).replace(".docx", ".pdf"), pdfFile);
-                        })
 
+                        })
+                    downloadPath = path.join(__dirname, basename(filePath).replace(".docx", ".pdf"));
+                    // downloadPath.toString();
 
                 }
+
 
             });
         } else {

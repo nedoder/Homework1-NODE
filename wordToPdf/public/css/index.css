@@ -47,7 +47,8 @@ body {
 
 ::-webkit-file-upload-button,
 input[type="submit"],
-.content button {
+.content button,
+.forms a {
     padding: 0.5rem;
     background-color: #4286f4;
     border-radius: 0.5rem;
@@ -65,7 +66,7 @@ input[type="email"] {
     border: none;
     padding: 0.5rem;
     margin: 1rem;
-    border-radius: 1rem;
+    border-radius: 0.5rem;
     background-color: #f2f2f2;
 }
 
@@ -81,6 +82,19 @@ input[type="email"] {
     background-color: rgba(19, 80, 91, 0.5);
     border-radius: 2rem;
     box-shadow: 0rem 0rem 0.2rem #4286f4;
+}
+
+.forms h4 {
+    margin: 0.5rem 0;
+}
+
+.forms h4:last-of-type {
+    margin-top: 1.5rem;
+}
+
+.forms a {
+    text-decoration: none;
+    color: black;
 }
 
 .undraw {
