@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap");
 * {
     box-sizing: border-box;
     padding: 0;
@@ -6,12 +6,16 @@
 }
 
 body {
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     font-size: 16px;
     font-family: "JetBrains Mono", monospace;
     background: #373b44;
     background: -webkit-linear-gradient(to bottom, #373b44, #4286f4);
-    background: linear-gradient(to bottom, #373b44, #4286f4);
+    background-image: linear-gradient(to bottom, #373b44, #4286f4);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    height: 100%;
 }
 
 .logo {
@@ -39,6 +43,7 @@ body {
 
 .content {
     position: absolute;
+    display: block;
     top: 10rem;
     width: 100%;
     margin: auto;
@@ -52,7 +57,7 @@ input[type="submit"],
     padding: 0.5rem;
     background-color: #4286f4;
     border-radius: 0.5rem;
-    border: 1px solid #13505B;
+    border: 1px solid #13505b;
     outline: none;
     margin: 1rem;
 }
@@ -108,6 +113,7 @@ input[type="email"] {
 }
 
 .undraw img {
+    display: block;
     width: 80%;
     height: auto;
 }
@@ -120,4 +126,66 @@ input[type="email"] {
     text-align: center;
     font-family: "JetBrains Mono", monospace;
     margin-left: 2rem;
+}
+
+@media only screen and (max-width: 992px) {
+    body {
+        font-size: 15px;
+    }
+    h1 {
+        font-size: 1rem;
+    }
+    .undraw img {
+        display: none;
+    }
+    .forms {
+        width: 90%;
+    }
+}
+
+@media only screen and (max-width: 450px) {
+    body {
+        font-size: 14px;
+    }
+    h1 {
+        font-size: 1rem;
+    }
+    .undraw img {
+        display: none;
+    }
+    .forms {
+        width: 85%;
+        height: 70vh;
+    }
+    .forms h4 {
+        margin-top: 0rem;
+    }
+    .forms h4:last-of-type {
+        margin-top: 1rem;
+    }
+    .logo,
+    .counter {
+        margin: 0;
+    }
+    .description {
+        top: 4rem;
+    }
+     ::-webkit-file-upload-button,
+    input[type="submit"],
+    .content button,
+    .forms a {
+        margin: 0.2rem;
+    }
+    input[type="email"] {
+        margin: 0.5rem;
+    }
+    #uploader_iframe {
+        margin-left: 0;
+    }
+}
+
+@media only screen and (max-height: 600px) {
+    .forms {
+        height: auto;
+    }
 }
