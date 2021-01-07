@@ -55,6 +55,36 @@ async function scrapData(url) {
     return searchResults;
 };
 
+function parseCsv() {
+    const obj = csvToJson.parse("./accomodation.csv", {
+        download: true,
+    });
+    return obj;
+
+}
+
+async function loadData() {
+    const allUrl = await allScrapData();
+    const csvObj = parseCsv();
+    for (let i = 0; i < allUrl.length; i++) {
+        const eachHtml = await fethHtml(allUrl[i]);
+        const $ = cheerio.load(eachHtml);
+        let url = allUrl[i];
+        let idHelp = allUrl[i].lastIndexOf("/");
+        let id = parseInt(allUrl[i].split(idHelp));
+        let slike = $("body").find(".fancybox > a ").toArray().map((x) => { return x.attribs.href });
+        let naslov = $("body").find("#listingbody > h2 ");
+
+        csvObj = {
+            url,
+            id,
+            slike,
+            naslov
+        }
+
+
+    }
+}
 
 
 module.exports = { scrapData, allScrapData, findNumPages };
