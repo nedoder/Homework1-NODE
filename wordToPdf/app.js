@@ -84,30 +84,29 @@ var transporter = nodemailer.createTransport({
 
 
 app.post("/send", (req, res) => {
-    if (req.body.email) {
-        var mailOptions = {
-            from: 'converternodejs@gmail.com',
-            to: req.body.email,
-            subject: 'Sending your converted PDF file',
-            text: 'We converted your .docx file to PDF. Hope you are satisfied with the result.',
-            attachments: {
-                path: downloadPath,
-            }
+            if (req.body.email) {
+                var mailOptions = {
+                    from: 'converternodejs@gmail.com',
+                    to: req.body.email,
+                    subject: 'Sending your converted PDF file',
+                    text: 'We converted your .docx file to PDF. Hope you are satisfied with the result.',
+                    attachments: {
+                        path: downloadPath,
+                    }
 
-        };
+                };
 
 
-        transporter.sendMail(mailOptions, function(error, info) {
-            if (error) {
-                console.log(error);
-            } else {
-                console.log('Email sent: ' + info.response);
-            }
+                transporter.sendMail(mailOptions, function(error, info) {
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        console.log('Email sent: ' + info.response);
+                    }
+                });
+            })
+
+
+        app.listen(process.env.PORT || 3000, function() {
+            console.log("Connected!");
         });
-    }
-})
-
-
-app.listen(3000, function() {
-    console.log("Connected!");
-});
