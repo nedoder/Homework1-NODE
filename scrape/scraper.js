@@ -1,7 +1,7 @@
 const cheerio = require("cheerio");
 const axios = require("axios").default;
-const jsonToCsv = require("jsonexport");
-const csvToJson = require("papaparse");
+const csvToJson = require("csvtojson");
+const jsonToCsv = require("objects-to-csv");
 const fs = require("fs");
 const fethHtml = async url => {
     try {
@@ -22,11 +22,9 @@ const findNumPages = async() => {
     const numberLen = $('body').find('#left_column_holder > div > span').toArray().map((x) => { return $(x).text() });
     numberLen1 = parseInt(numberLen[0].slice(-4));
     if (numberLen1 % 20 === 0) {
-        console.log(numberLen1);
         return numberLen1 / 20;
     } else {
         numberLen1 = parseInt(numberLen1 / 20) + 1;
-        console.log(numberLen1);
         return numberLen1;
     }
 
@@ -41,7 +39,7 @@ async function allScrapData() {
             let linkUrl = `https://www.realitica.com/?cur_page=${i}&for=Najam&pZpa=Crna+Gora&pState=Crna+Gora&type%5B%5D=&lng=hr`;
             allLinks.push(await scrapData(linkUrl));
         }
-        return allLinks;
+        return allLinks.flat();
     } catch {
         console.log("Error occured!");
     }
@@ -55,36 +53,55 @@ async function scrapData(url) {
     return searchResults;
 };
 
-function parseCsv() {
-    const obj = csvToJson.parse("./accomodation.csv", {
-        download: true,
-    });
-    return obj;
+// convert csv to json
+// function parseCsv() {
+//     const pathCsv = "accomodation.csv"
+//     csvToJson()
+//         .fromFile(pathCsv)
+//         .then((jsonObj) => {
+//             console.log(jsonObj);
+//         });
 
-}
+// }
 
+// load rest of the data
 async function loadData() {
-    const allUrl = await allScrapData();
-    const csvObj = parseCsv();
-    for (let i = 0; i < allUrl.length; i++) {
-        const eachHtml = await fethHtml(allUrl[i]);
-        const $ = cheerio.load(eachHtml);
-        let url = allUrl[i];
-        let idHelp = allUrl[i].lastIndexOf("/");
-        let id = parseInt(allUrl[i].split(idHelp));
-        let slike = $("body").find(".fancybox > a ").toArray().map((x) => { return x.attribs.href });
-        let naslov = $("body").find("#listingbody > h2 ");
+    try {
+        const allUrl = await allScrapData();
+        // let csvObj = parseCsv();
+        for (let i = 0; i < allUrl.length; i++) {
+            const eachHtml = await fethHtml(allUrl[i]);
+            const $ = cheerio.load(eachHtml);
+            let url = allUrl[i];
+            let idHelp = url.lastIndexOf("/") + 1;
+            let id = parseInt(url.slice(idHelp));
+            let slike = $("body").find(".fancybox").toArray().map((x) => { return x.attribs.href });
+            let naslov = $("body").find("#listing_body > h2 ").text();
+            // let lokacija
+            // let opis
+            // let oglasio
+            // let mobilni
 
-        csvObj = {
-            url,
-            id,
-            slike,
-            naslov
+            var csvObj = {
+                url: url,
+                id: id,
+                slike: slike,
+                naslov: naslov
+            }
+            new jsonToCsv([csvObj]).toDisk("accomodation.csv", { append: true });
+
         }
 
+
+
+
+        return csvObj;
+    } catch (err) {
+
+        console.log(err);
 
     }
 }
 
 
-module.exports = { scrapData, allScrapData, findNumPages };
+module.exports = { scrapData, allScrapData, findNumPages, loadData };

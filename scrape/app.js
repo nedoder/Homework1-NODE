@@ -3,7 +3,7 @@ const app = express();
 const axios = require("axios");
 const path = require("path");
 const cron = require("node-cron")
-const scrapData = require("./scraper").allScrapData;
+const scrapData = require("./scraper").loadData;
 
 app.get("/", async function(req, res) {
     const result = await scrapData();
