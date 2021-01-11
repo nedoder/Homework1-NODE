@@ -8,7 +8,7 @@ const fs = require('fs');
 const handlebars = require("express-handlebars");
 var nodemailer = require('nodemailer');
 var counter = require('./counter.json');
-counterPath = './counter.json';
+counterPath = path.join(__dirname, './counter.json');
 var outputVal = counter.counter;
 var downloadPath = "";
 
@@ -28,18 +28,21 @@ app.engine('hbs', handlebars({
 }));
 
 app.use(express.static("public"));
-// app.use("/outputPDF", express.static(__dirname + '/outputPDF'));
+app.use(" ", express.static(__dirname))
+
 
 app.get("/", (req, res) => {
-    res.render('main', { layout: 'index', outputVal, downloadPath });
+    res.render('main', { layout: 'index', outputVal, downloadPath, newFile });
 });
 
-app.get("/send", (req, res) => {
-    res.render('main', { layout: 'index', outputVal, downloadPath });
-});
+
+
+
 
 app.post("/", (req, res) => {
-    if (req.files.upfile) {
+    if (req.files === null) {
+        res.send("No file uploaded!");
+    } else if (req.files.upfile) {
         const file = req.files.upfile;
         const name = file.name;
         const type = file.mimetype;
@@ -55,7 +58,9 @@ app.post("/", (req, res) => {
                         .then((pdfFile) => {
                             counter.counter++;
                             fs.writeFileSync(counterPath, JSON.stringify(counter));
-                            writeFileSync(basename(filePath).replace(".docx", ".pdf"), pdfFile);
+                            const newFile = writeFileSync(basename(filePath).replace(".docx", ".pdf"), pdfFile);
+                            // fs.unlinkSync(filePath);
+
                         })
                         .catch((err) => {
                             console.error(err);
@@ -63,6 +68,7 @@ app.post("/", (req, res) => {
 
                     downloadPath = path.join(__dirname, basename(filePath).replace(".docx", ".pdf"));
                     downloadPath.toString();
+
 
                 }
 
@@ -81,10 +87,9 @@ var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'converternodejs@gmail.com',
-        pass: process.env.PASSWORD
+        pass: "nodejesuper1"
     }
 });
-
 
 
 app.post("/send", (req, res) => {
@@ -108,8 +113,11 @@ app.post("/send", (req, res) => {
                 console.log('Email sent: ' + info.response);
             }
         });
+
+        res.redirect('/');
     } else {
-        console.log("Failed to send email!");
+        res.redirect('/');
+
     }
 
 });
