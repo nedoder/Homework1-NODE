@@ -17,7 +17,7 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 require('dotenv').config();
 
 
-initIva(process.env.APIKEY);
+initIva("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmZiYTAxN2EyMzhjYTAwMjk0OGNmYWYiLCJjcmVhdGVkQXQiOjE2MTAzMjYwNDAwMTUsImlhdCI6MTYxMDMyNjA0MH0.Pg6_WVVhh6oHg8L_9lD0ug7lEXQbgGloCFSspaOnFOw");
 const app = express();
 app.use(upload());
 
@@ -28,6 +28,7 @@ app.engine('hbs', handlebars({
 }));
 
 app.use(express.static("public"));
+// app.use("/outputPDF", express.static(__dirname + '/outputPDF'));
 
 app.get("/", (req, res) => {
     res.render('main', { layout: 'index', outputVal, downloadPath });
@@ -55,8 +56,11 @@ app.post("/", (req, res) => {
                             counter.counter++;
                             fs.writeFileSync(counterPath, JSON.stringify(counter));
                             writeFileSync(basename(filePath).replace(".docx", ".pdf"), pdfFile);
-
                         })
+                        .catch((err) => {
+                            console.error(err);
+                        });
+
                     downloadPath = path.join(__dirname, basename(filePath).replace(".docx", ".pdf"));
                     downloadPath.toString();
 
@@ -84,29 +88,33 @@ var transporter = nodemailer.createTransport({
 
 
 app.post("/send", (req, res) => {
-            if (req.body.email) {
-                var mailOptions = {
-                    from: 'converternodejs@gmail.com',
-                    to: req.body.email,
-                    subject: 'Sending your converted PDF file',
-                    text: 'We converted your .docx file to PDF. Hope you are satisfied with the result.',
-                    attachments: {
-                        path: downloadPath,
-                    }
+    if (req.body.email) {
+        var mailOptions = {
+            from: 'converternodejs@gmail.com',
+            to: req.body.email,
+            subject: 'Sending your converted PDF file',
+            text: 'We converted your .docx file to PDF. Hope you are satisfied with the result.',
+            attachments: {
+                path: downloadPath,
+            }
 
-                };
-
-
-                transporter.sendMail(mailOptions, function(error, info) {
-                    if (error) {
-                        console.log(error);
-                    } else {
-                        console.log('Email sent: ' + info.response);
-                    }
-                });
-            })
+        };
 
 
-        app.listen(process.env.PORT || 3000, function() {
-            console.log("Connected!");
+        transporter.sendMail(mailOptions, function(error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
         });
+    } else {
+        console.log("Failed to send email!");
+    }
+
+});
+
+
+app.listen(process.env.PORT || 3000, function() {
+    console.log("Connected!");
+});

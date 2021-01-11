@@ -77,16 +77,46 @@ async function loadData() {
             let id = parseInt(url.slice(idHelp));
             let slike = $("body").find(".fancybox").toArray().map((x) => { return x.attribs.href });
             let naslov = $("body").find("#listing_body > h2 ").text();
-            // let lokacija
-            // let opis
-            // let oglasio
-            // let mobilni
+            let lokacija = (eachHtml.match(/<strong>Lokacija<\/strong>: .*?<br \/>/) === null) ? " " : eachHtml.match(/<strong>Lokacija<\/strong>: .*?<br \/>/)[0].slice(27, -6);
+            let vrsta = (eachHtml.match(/<strong>Vrsta<\/strong>: .*?<br\/>/) === null) ? " " : eachHtml.match(/<strong>Vrsta<\/strong>: .*?<br\/>/)[0].slice(24, -5);
+            let podrucje = (eachHtml.match(/<strong>Područje<\/strong>: .*?<br \/>/) === null) ? " " : eachHtml.match(/<strong>Područje<\/strong>: .*?<br \/>/)[0].slice(26, -6);
+            let broj_soba = (eachHtml.match(/<strong>Spavaćih Soba<\/strong>: .*?<br \/>/) === null) ? " " : eachHtml.match(/<strong>Spavaćih Soba<\/strong>: .*?<br \/>/)[0].slice(31, -6);
+            let broj_kupatila = (eachHtml.match(/<strong>Kupatila<\/strong>: .*?<br \/>/) === null) ? " " : eachHtml.match(/<strong>Kupatila<\/strong>: .*?<br \/>/)[0].slice(26, -6);
+            let cijena = (eachHtml.match(/<strong>Cijena<\/strong>: .*?<br \/>/) === null) ? " " : eachHtml.match(/<strong>Cijena<\/strong>: .*?<br \/>/)[0].slice(31, -6);
+            let povrsina = (eachHtml.match(/<strong>Stambena Površina<\/strong>: .*?<br \/>/) === null) ? " " : eachHtml.match(/<strong>Stambena Površina<\/strong>: .*?<br \/>/)[0].slice(35, -42);
+            let zemljiste = (eachHtml.match(/<strong>Zemljište<\/strong>: .*?<br \/>/) === null) ? " " : eachHtml.match(/<strong>Zemljište<\/strong>: .*?<br \/>/)[0].slice(27, -40);
+            let parking = (eachHtml.match(/<strong>Parking Mjesta<\/strong>: .*?<br \/>/) === null) ? " " : eachHtml.match(/<strong>Parking Mjesta<\/strong>: .*?<br \/>/)[0].slice(32, -6);
+            let od_mora = (eachHtml.match(/<strong>Od Mora \(m\)<\/strong>: .*?<br\/>/) === null) ? " " : eachHtml.match(/<strong>Od Mora \(m\)<\/strong>: .*?<br\/>/)[0].slice(29, -5);
+            let novogradnja = (eachHtml.match(/<strong>Novogradnja.*<\/strong>/) === null) ? false : true;
+            let klima = (eachHtml.match(/<strong>Klima.*<\/strong>/) === null) ? false : true;
+            let opis = (eachHtml.match(/<strong>Opis<\/strong>: .*?<br \/>/) === null) ? " " : eachHtml.match(/<strong>Opis<\/strong>: .*?<br \/>/)[0].slice(22, -6);
+            let oglasio = (eachHtml.match(/<strong>Oglasio<\/strong>: .*?<br \/>/) === null) ? " " : eachHtml.match(/<strong>Oglasio<\/strong>: .*?<br \/>/)[0].slice(25, -6);
+            let mobilni = (eachHtml.match(/<strong>Mobitel<\/strong>: .*?<br \/>/) === null) ? " " : eachHtml.match(/<strong>Mobitel<\/strong>: .*?<br \/>/)[0].slice(25, -6);
+            let zadnja_promjena = (eachHtml.match(/<strong>Zadnja Promjena<\/strong>: .*?\n<br \/>/) === null) ? " " : eachHtml.match(/<strong>Zadnja Promjena<\/strong>: .*?\n<br \/>/)[0].slice(33, -6);
+
+
 
             var csvObj = {
-                url: url,
-                id: id,
-                slike: slike,
-                naslov: naslov
+                Url: url,
+                ID: id,
+                Slike: slike,
+                Naslov: naslov,
+                Lokacija: lokacija,
+                Vrsta: vrsta,
+                Područje: podrucje,
+                Broj_soba: broj_soba,
+                Broj_kupatila: broj_kupatila,
+                Cijena: cijena,
+                Površina: povrsina,
+                Zemljište: zemljiste,
+                Parking: parking,
+                Od_mora: od_mora,
+                Novogradnja: novogradnja,
+                Klima: klima,
+                Opis: opis,
+                Oglasio: oglasio,
+                Mobilni: mobilni,
+                Poslednja_promjena: zadnja_promjena
             }
             new jsonToCsv([csvObj]).toDisk("accomodation.csv", { append: true });
 
