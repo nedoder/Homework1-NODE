@@ -5,8 +5,8 @@ const path = require('path');
 const fs = require('fs');
 const handlebars = require("express-handlebars");
 var nodemailer = require('nodemailer');
-var counter = require('./counter.json');
-counterPath = path.join(__dirname, './counter.json');
+var counter = require('./public/counter.json');
+counterPath = path.join(__dirname, '/public/counter.json');
 var outputVal = counter.counter;
 var downloadPath = path.join(__dirname, 'converter.pdf');
 
@@ -15,7 +15,7 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 require('dotenv').config();
 
 
-initIva("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmZiYTAxN2EyMzhjYTAwMjk0OGNmYWYiLCJjcmVhdGVkQXQiOjE2MTAzMjYwNDAwMTUsImlhdCI6MTYxMDMyNjA0MH0.Pg6_WVVhh6oHg8L_9lD0ug7lEXQbgGloCFSspaOnFOw");
+initIva(process.env.APIKEY);
 const app = express();
 app.use(upload());
 
@@ -26,7 +26,7 @@ app.engine('hbs', handlebars({
 }));
 
 app.use(express.static("public"));
-app.use("converter.pdf", express.static(downloadPath));
+app.use(downloadPath, express.static(downloadPath));
 
 
 app.get("/", (req, res) => {
@@ -84,7 +84,7 @@ var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'converternodejs@gmail.com',
-        pass: "nodejesuper1"
+        pass: process.env.PASSWORD
     }
 });
 
