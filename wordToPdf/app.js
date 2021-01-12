@@ -10,7 +10,7 @@ var nodemailer = require('nodemailer');
 var counter = require('./counter.json');
 counterPath = path.join(__dirname, './counter.json');
 var outputVal = counter.counter;
-var downloadPath = "";
+var downloadPath = path.join(__dirname, 'converter.pdf');
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -28,11 +28,11 @@ app.engine('hbs', handlebars({
 }));
 
 app.use(express.static("public"));
-app.use(" ", express.static(__dirname))
+app.use("converter.pdf", express.static(__dirname))
 
 
 app.get("/", (req, res) => {
-    res.render('main', { layout: 'index', outputVal, downloadPath, newFile });
+    res.render('main', { layout: 'index', outputVal, downloadPath });
 });
 
 
@@ -58,16 +58,15 @@ app.post("/", (req, res) => {
                         .then((pdfFile) => {
                             counter.counter++;
                             fs.writeFileSync(counterPath, JSON.stringify(counter));
-                            const newFile = writeFileSync(basename(filePath).replace(".docx", ".pdf"), pdfFile);
-                            // fs.unlinkSync(filePath);
+                            writeFileSync("converter.pdf", pdfFile);
+                            fs.unlinkSync(filePath);
 
                         })
                         .catch((err) => {
                             console.error(err);
                         });
 
-                    downloadPath = path.join(__dirname, basename(filePath).replace(".docx", ".pdf"));
-                    downloadPath.toString();
+
 
 
                 }
