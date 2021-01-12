@@ -1,8 +1,6 @@
 const express = require("express");
 const upload = require("express-fileupload");
 const { docxToPdfFromPath, initIva } = require("iva-converter");
-const { writeFileSync } = require("fs");
-const { basename } = require("path");
 const path = require('path');
 const fs = require('fs');
 const handlebars = require("express-handlebars");
@@ -28,7 +26,7 @@ app.engine('hbs', handlebars({
 }));
 
 app.use(express.static("public"));
-app.use("converter.pdf", express.static(__dirname))
+app.use("converter.pdf", express.static(downloadPath));
 
 
 app.get("/", (req, res) => {
@@ -46,7 +44,7 @@ app.post("/", (req, res) => {
         const file = req.files.upfile;
         const name = file.name;
         const type = file.mimetype;
-        const uploadpath = __dirname + "/uploads/" + name;
+        const uploadpath = path.join(__dirname, '/uploads/' + name);
         if (type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
             file.mv(uploadpath, (err) => {
                 if (err) {
@@ -58,7 +56,7 @@ app.post("/", (req, res) => {
                         .then((pdfFile) => {
                             counter.counter++;
                             fs.writeFileSync(counterPath, JSON.stringify(counter));
-                            writeFileSync("converter.pdf", pdfFile);
+                            fs.writeFileSync("converter.pdf", pdfFile);
                             fs.unlinkSync(filePath);
 
                         })
