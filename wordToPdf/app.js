@@ -9,7 +9,7 @@ var counter = require('./public/counter.json');
 counterPath = path.join(__dirname, '/public/counter.json');
 var outputVal = counter.counter;
 var downloadPath = path.join(__dirname, 'converter.pdf');
-
+var backgroundColor = "#4286f4";
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 require('dotenv').config();
@@ -30,7 +30,7 @@ app.use(downloadPath, express.static(downloadPath));
 
 
 app.get("/", (req, res) => {
-    res.render('main', { layout: 'index', outputVal, downloadPath });
+    res.render('main', { layout: 'index', outputVal, downloadPath, backgroundColor });
 });
 
 
@@ -55,9 +55,11 @@ app.post("/", (req, res) => {
                     docxToPdfFromPath(filePath)
                         .then((pdfFile) => {
                             counter.counter++;
+                            backgroundColor = "#13505b";
                             fs.writeFileSync(counterPath, JSON.stringify(counter));
                             fs.writeFileSync("converter.pdf", pdfFile);
                             fs.unlinkSync(filePath);
+
 
                         })
                         .catch((err) => {
